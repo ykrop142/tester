@@ -8,6 +8,13 @@
     <title>Document</title>
 </head>
 <body>
-
+<form action="/auth" method="post" style="text-align: center; margin-top: 20%">
+    @csrf
+    <input type="text" name="email">
+    <p></p>
+    <input type="password" name="password">
+    <p></p>
+    <button type="submit">ok</button>
+</form>
 </body>
 </html>
