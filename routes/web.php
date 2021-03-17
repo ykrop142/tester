@@ -15,4 +15,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'Authore@index');
 Route::post('/auth','Authore@login');
 
+Route::group(['prefix' => 'admin'], function () {
+    Route::get('reg', 'Admin@index');
+    Route::post('reger','Admin@reguser');
+});
+
 
