@@ -18,16 +18,18 @@ class Authore extends Controller
         }else if(empty($password)) {
             echo 'pass empty';
         }else{
-            //$users=DB::select('select * from user where email=$email',[1]);
             $users = DB::table('user')
                 ->where('email', $email)
                 ->where('password',$password)
                 ->first();
             if($users==Null){
                 echo 'dont search user';
-            }else{
-                dd($users);
+            }else if ($users->permission_id==3){
+                return view('/author');
+                //dd($users);
                 // return view('author',['users'=>$users]);
+            }else{
+                return view('/main');
             }
         }
     }
