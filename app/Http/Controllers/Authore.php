@@ -10,24 +10,23 @@ class Authore extends Controller
     public function index(){
         return view('author');
     }
+
     public function login(request $request){
         $email=$request['email'];
         $password=$request['password'];
         if(empty($email)){
-            echo 'mail empty';
+            echo 'Введите почту';
         }else if(empty($password)) {
-            echo 'pass empty';
+            echo 'Введите пароль';
         }else{
             $users = DB::table('user')
                 ->where('email', $email)
                 ->where('password',$password)
                 ->first();
             if($users==Null){
-                echo 'dont search user';
+                echo 'Пользователя с такой почтой нет';
             }else if ($users->permission_id==3){
-                return view('/author');
-                //dd($users);
-                // return view('author',['users'=>$users]);
+                return redirect('/admin');
             }else{
                 return view('/main');
             }
