@@ -16,8 +16,10 @@ Route::get('/', 'Authore@index');
 Route::post('/auth','Authore@login');
 
 Route::group(['prefix' => 'admin'], function () {
-    Route::get('reg', 'Admin@index');
-    Route::post('reger','Admin@reguser');
+    Route::post('reguser','Admin@reguser');
+    Route::post('reg_group','Admin@addgroup');
+    Route::get('/','Admin@mainadm');
+
 });
 
 
