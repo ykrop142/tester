@@ -27,9 +27,12 @@ class Authore extends Controller
                 echo 'Пользователя с такой почтой нет';
             }else if ($users->permission_id==3){
                 return redirect('/admin');
-            }else{
-                return view('/main');
+            }else if (($users->permission_id==2)){
+                return redirect('/teacher');
+            }else {
+                return redirect('/student');
             }
         }
     }
+
 }
