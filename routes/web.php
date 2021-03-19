@@ -22,4 +22,11 @@ Route::group(['prefix' => 'admin'], function () {
 
 });
 
+Route::group(['prefix'=>'teacher'],function (){
+    Route::get('/','Teacher@index');
+    Route::post('add_quest','Teacher@add_quests');
+    Route::post('create_name','Teacher@creatname');
+    Route::get('create_test','Teacher@createtestvi');
+});
+
 
