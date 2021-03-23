@@ -17,7 +17,10 @@ class TestQuestTable extends Migration
             $table->id();
             $table->integer('id_test');
             $table->string('numb_quest');
-            $table->string('ask');
+            $table->string('ask1');
+            $table->string('ask2');
+            $table->string('ask3');
+            $table->string('ask4');
         });
     }
 

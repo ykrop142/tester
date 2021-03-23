@@ -18,7 +18,6 @@ class UserDataTable extends Migration
             $table->string('name');
             $table->string('fam');
             $table->string('phon_numb');
-            $table->string('avatar')->default('https://img2.freepng.ru/20180521/ocp/kisspng-computer-icons-user-profile-avatar-french-people-5b0365e4f1ce65.9760504415269493489905.jpg');
         });
     }
 
