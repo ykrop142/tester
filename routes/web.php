@@ -27,6 +27,9 @@ Route::group(['prefix'=>'teacher'],function (){
     Route::post('add_quest','Teacher@add_quests');
     Route::post('create_name','Teacher@creatname');
     Route::get('create_test','Teacher@createtestvi');
+
+    Route::get('test','Teacher@ajax');
+    Route::post('getmsg','Teacher@ajaxe');
 });
 
 
