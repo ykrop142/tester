@@ -5,6 +5,10 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <script src = "//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>Панель преподавателя</title>
 
     <style>
@@ -20,6 +24,10 @@
         {
             cursor: pointer;
         }
+        table,td,th,tr{
+            border: 1px solid grey;
+        }
+
     </style>
 
 </head>
@@ -46,8 +54,60 @@
         <button type="submit">перейти к созданию теста</button>
     </form>
 </div>
+
 <div class="showable show-edittest" style="text-align: center; margin-top: 18%">
-2
+    <table>
+        <tr>
+            <th>
+                Название теста
+            </th>
+            <th>
+                Доступ группы
+            </th>
+        </tr>
+        @foreach($tests as $test)
+            <div class="modal fade" id="TestModal{{$test->id}}" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ModalLabel">{{$test->name_test}}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+                            <span class="success"  style="color:green; margin-top:10px; margin-bottom: 10px;"></span>
+
+
+                            <div class="container" >
+                                <div class="row" id="ask1">
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <tr>
+            <td>
+                {{$test->name_test}}
+            </td>
+            <td>
+                {{$test->numb_group}}
+            </td>
+            <td>
+                <button type="button" name="ids" value="{{$test->id}}" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#TestModal{{$test->id}}"  onclick="test({{$test->id}})">
+                    Посмотреть тест
+                </button>
+            </td>
+        </tr>
+        @endforeach
+    </table>
 </div>
 
 <div class="showable show-checkres" style="text-align: center; margin-top: 18%">
@@ -69,6 +129,42 @@
             }
         });
     });
+
+    function test(e){
+
+        let ids = e;
+        let _token   = $('meta[name="csrf-token"]').attr('content');
+
+        $.ajax({
+            url: "teacher/getmsg",
+            type:"POST",
+            data:{
+                ids:ids,
+                _token: _token
+            },
+            success:function(response){
+               // console.log(response);
+                if(response) {
+                 //   $('#ask1').html(response.ids['ask1']);
+
+
+                   // let x ='<div class="row">' +
+                   //     '<div class="col" id="ask1">' +
+                   //     response.ids +
+                   //     '</div>';// +
+                   //     //'<div class="col">' +
+                   //    // 'цифра' +
+                   //    // '</div>';
+                    let y = '';
+                    for (let i =0;i<2;i++){
+                        y=y+'<div class="col-12" id="ask1">'+response.ids[i]['ask1'];
+                    }
+                    $('#ask1').html(y);
+                 //   $("#ajaxform")[0].reset();
+                }
+            },
+        });
+    }
 </script>
 
 </body>
