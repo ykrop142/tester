@@ -11,11 +11,26 @@ class Teacher extends Controller
         $group=DB::table('group')
             ->select('name_group')
             ->get();
-        return view('teacher.main',compact('group'));
+        $tests=DB::table('test_inf')
+            ->select('*')
+            ->get();
+        return view('teacher.main',compact('group','tests'));
     }
 
     public function createtestvi(){
         return view('teacher.create_test');
+    }
+
+    public function ajax(){
+        return view('teacher.test');
+    }
+
+    public function ajaxe(Request $request){
+        $data = $request->all();
+        $tests=DB::table('test_quest')
+            ->where('id_test','=',$data['ids'])
+            ->get();
+       return response()->json(["ids"=>$tests]);
     }
 
     public function add_quests(Request $request){
@@ -53,12 +68,7 @@ class Teacher extends Controller
                 }
                // dd($kolqest);
                 DB::table('test_quest')
-                    ->insert([
-                        ['id_test'=>$id_test[0]->id,'numb_quest'=>$kolqest,'ask'=>$ask1],
-                        ['id_test'=>$id_test[0]->id,'numb_quest'=>$kolqest,'ask'=>$ask2],
-                        ['id_test'=>$id_test[0]->id,'numb_quest'=>$kolqest,'ask'=>$ask3],
-                        ['id_test'=>$id_test[0]->id,'numb_quest'=>$kolqest,'ask'=>$ask4]
-                    ]);
+                    ->insert(['id_test'=>$id_test[0]->id,'numb_quest'=>$kolqest,'ask1'=>$ask1,'ask2'=>$ask2,'ask3'=>$ask3,'ask4'=>$ask4]);
                 if(!empty($request['end'])){
                     return redirect('/teacher');
                 }else{
