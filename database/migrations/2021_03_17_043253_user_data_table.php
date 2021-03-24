@@ -15,6 +15,7 @@ class UserDataTable extends Migration
     {
         Schema::create('user_data', function (Blueprint $table) {
             $table->id();
+            $table->integer('id_user');
             $table->string('name');
             $table->string('fam');
             $table->string('phon_numb');
