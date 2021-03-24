@@ -21,16 +21,38 @@ class Teacher extends Controller
         return view('teacher.create_test');
     }
 
-    public function ajax(){
-        return view('teacher.test');
-    }
-
     public function ajaxe(Request $request){
         $data = $request->all();
-        $tests=DB::table('test_quest')
+        $tests=DB::table('test_ask_students')
             ->where('id_test','=',$data['ids'])
-            ->get();
-       return response()->json(["ids"=>$tests]);
+            ->distinct()
+            ->get('id_student');
+        $checkkol=count($tests);
+
+        for ($i=0;$i<$checkkol;$i++) {
+            $users = DB::table('user')
+                ->where('id', '=', $tests[$i]->id_student)
+                ->get();
+            $students[$i] = $users[0]->id;
+            $groupid[$i]=$users[0]->group_id;
+
+            $groupdate=DB::table('group')
+                ->where('id','=', $groupid[$i])
+                ->get();
+            $group[$i]=$groupdate[0];
+
+            $datastud=DB::table('user_data')
+                ->where('id_user','=',$students[$i])
+                ->get();
+            $datastudents[$i]=$datastud[0];
+
+            $checkbal=DB::table('result_test_students')
+                ->where('id_students','=',$students[$i])
+                ->where('id_tests','=',$data['ids'])
+                ->get();
+            $bal[$i]=$checkbal[0];
+        }
+       return response()->json(["students"=>$datastudents,"col"=>$checkkol,"group"=>$group,"bal"=>$bal,"idu"=>$students]);
     }
 
     public function add_quests(Request $request){
@@ -66,7 +88,6 @@ class Teacher extends Controller
                 }else{
                     $kolqest=$checkkol->numb_quest+1;
                 }
-               // dd($kolqest);
                 DB::table('test_quest')
                     ->insert(['id_test'=>$id_test[0]->id,'numb_quest'=>$kolqest,'ask1'=>$ask1,'ask2'=>$ask2,'ask3'=>$ask3,'ask4'=>$ask4]);
                 if(!empty($request['end'])){
@@ -99,5 +120,12 @@ class Teacher extends Controller
             echo 'danix net';
         }
 
+    }
+
+    public function viewstudentres(Request $request){
+        $test=$request->id; //id stud
+        $test1=$request->iq; //id test
+        echo $test;
+        echo $test1;
     }
 }
