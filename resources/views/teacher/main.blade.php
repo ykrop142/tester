@@ -109,7 +109,6 @@
         @endforeach
     </table>
 </div>
-
 <div class="showable show-checkres" style="text-align: center; margin-top: 18%">
 3
 </div>
@@ -131,10 +130,8 @@
     });
 
     function test(e){
-
         let ids = e;
         let _token   = $('meta[name="csrf-token"]').attr('content');
-
         $.ajax({
             url: "teacher/getmsg",
             type:"POST",
@@ -145,22 +142,21 @@
             success:function(response){
                // console.log(response);
                 if(response) {
-                 //   $('#ask1').html(response.ids['ask1']);
-
-
                    // let x ='<div class="row">' +
                    //     '<div class="col" id="ask1">' +
                    //     response.ids +
                    //     '</div>';// +
                    //     //'<div class="col">' +
                    //    // 'цифра' +
-                   //    // '</div>';
+                   let q =response.col;
                     let y = '';
-                    for (let i =0;i<2;i++){
-                        y=y+'<div class="col-12" id="ask1">'+response.ids[i]['ask1'];
+                    for (let i =0;i<q;i++){
+                        y=y+'<div class="col-12" id="ask1">'+response.students[i]['name']+
+                            ' '+response.students[i]['fam']+' Группа: '+response.group[i]['name_group']+
+                            ' Оценка: '+ response.bal[i]['ball']+' <a href="https://tester.greenkras.ru/teacher/view/'+
+                            response.idu[i]+ids+'">Результаты теста</a>';
                     }
                     $('#ask1').html(y);
-                 //   $("#ajaxform")[0].reset();
                 }
             },
         });
