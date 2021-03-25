@@ -16,6 +16,7 @@ class TestQuestTable extends Migration
         Schema::create('test_quest', function (Blueprint $table) {
             $table->id();
             $table->integer('id_test');
+            $table->string('name_quest');
             $table->string('numb_quest');
             $table->string('ask1');
             $table->string('ask2');
