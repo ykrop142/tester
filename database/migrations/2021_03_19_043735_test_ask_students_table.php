@@ -18,7 +18,7 @@ class TestAskStudentsTable extends Migration
             $table->integer('id_student');
             $table->integer('id_test');
             $table->string('numb_quest');
-            $table->boolean('ask');
+            $table->string('ask');
         });
     }
 
