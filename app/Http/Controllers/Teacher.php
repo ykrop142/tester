@@ -50,7 +50,12 @@ class Teacher extends Controller
                 ->where('id_students','=',$students[$i])
                 ->where('id_tests','=',$data['ids'])
                 ->get();
-            $bal[$i]=$checkbal[0];
+            if (empty($checkbal[0])){
+                $bal[$i]=1;
+            }else{
+                $bal[$i]=$checkbal[0];
+            }
+
         }
        return response()->json(["students"=>$datastudents,"col"=>$checkkol,"group"=>$group,"bal"=>$bal,"idu"=>$students]);
     }
@@ -123,9 +128,70 @@ class Teacher extends Controller
     }
 
     public function viewstudentres(Request $request){
-        $test=$request->id; //id stud
-        $test1=$request->iq; //id test
-        echo $test;
-        echo $test1;
+        $idu=$request->id; //id stud
+        $idt=$request->iq; //id test
+        $stud=DB::table('user_data')
+            ->where('id_user','=',$idu)
+            ->get();
+
+        $testn=DB::table('test_inf')
+            ->where('id','=',$idt)
+            ->get();
+
+        $testq=DB::table('test_quest')
+            ->where('id_test','=',$idt)
+            ->get();
+
+        $asks=DB::table('test_ask_students')
+            ->where('id_student','=',$idu)
+            ->where('id_test','=',$idt)
+            ->get();
+
+        $ocenk=DB::table('result_test_students')
+            ->where('id_students','=',$idu)
+            ->where('id_tests','=',$idt)
+            ->get();
+        $colask=count($asks)+1; //+5
+
+        $j=0;
+
+        $res[0]= array(
+            'name'=>'',
+            'fam'=>'',
+            'phon_numb'=>'',
+            'name_test'=>'',
+            'numb_group'=>'',
+            'name_quest'=>'',
+            'numb_quest'=>'',
+            'ask'=>'',
+            'ocenka'=>'',
+            'color'=>''
+        );
+
+        $res[0]['name']=$stud[0]->name;
+        $res[0]['fam']=$stud[0]->fam;
+        $res[0]['phon_numb']=$stud[0]->phon_numb;
+        $res[0]['name_test']=$testn[0]->name_test;
+        $res[0]['numb_group']=$testn[0]->numb_group;
+        $res[0]['ocenka']=$ocenk[0]->ball;
+
+        for ($i=1;$i<$colask;$i++){
+            $res[$i]['name']='';
+            $res[$i]['fam']='';
+            $res[$i]['phon_numb']='';
+            $res[$i]['name_test']='';
+            $res[$i]['numb_group']='';
+            $res[$i]['ocenka']='';
+            $res[$i]['name_quest']=$testq[$j]->name_quest;
+            $res[$i]['numb_quest']=$asks[$j]->numb_quest;
+            $res[$i]['ask']=$asks[$j]->ask;
+            if ($asks[$j]->ask==$testq[$j]->ask1){
+                $res[$i]['color']='green';
+            }else{
+                $res[$i]['color']='red';
+            }
+            $j++;
+        }
+       return view('teacher.view',compact('res'));
     }
 }
