@@ -36,9 +36,7 @@
 
 <a class="showlink" data-show="createtest">Создать тест</a>
 <p></p>
-<a class="showlink" data-show="edittest">Редактировать тест</a>
-<p></p>
-<a class="showlink" data-show="checkres">Посмотреть результаты теста</a>
+<a class="showlink" data-show="edittest">Посмотреть результаты теста</a>
 <p></p>
 
 <div class="showable show-createtest" style="text-align: center; margin-top: 18%">
@@ -102,15 +100,12 @@
             </td>
             <td>
                 <button type="button" name="ids" value="{{$test->id}}" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#TestModal{{$test->id}}"  onclick="test({{$test->id}})">
-                    Посмотреть тест
+                   Список студентов прошедших тест
                 </button>
             </td>
         </tr>
         @endforeach
     </table>
-</div>
-<div class="showable show-checkres" style="text-align: center; margin-top: 18%">
-3
 </div>
 
 <script>
@@ -142,18 +137,18 @@
             success:function(response){
                // console.log(response);
                 if(response) {
-                   // let x ='<div class="row">' +
-                   //     '<div class="col" id="ask1">' +
-                   //     response.ids +
-                   //     '</div>';// +
-                   //     //'<div class="col">' +
-                   //    // 'цифра' +
                    let q =response.col;
+                   let ball;
                     let y = '';
                     for (let i =0;i<q;i++){
+                        if (response.bal[i] == 1){
+                            ball='Не завершен';
+                        }else {
+                            ball=response.bal[i]['ball'];
+                        }
                         y=y+'<div class="col-12" id="ask1">'+response.students[i]['name']+
                             ' '+response.students[i]['fam']+' Группа: '+response.group[i]['name_group']+
-                            ' Оценка: '+ response.bal[i]['ball']+' <a href="https://tester.greenkras.ru/teacher/view/'+
+                            ' Оценка: '+ ball+' <a href="https://tester.greenkras.ru/teacher/view/'+
                             response.idu[i]+ids+'">Результаты теста</a>';
                     }
                     $('#ask1').html(y);
@@ -162,7 +157,5 @@
         });
     }
 </script>
-
 </body>
-
 </html>
